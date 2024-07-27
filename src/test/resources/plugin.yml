@@ -1,0 +1,20 @@
+main: ${PACKAGE}.${NAME}
+name: ${NAME}
+version: "${VERSION}"
+api-version: "1.16"
+author: "LTIT"
+description: "An all-in-one solution to server management"
+commands:
+  discord:
+    description: Link to discord in config
+    usage: "For the discord server, type /discord"
+    aliases: "/discord"
+permissions:
+  example.test:
+    description: "Hi, ig"
+    default: true
+  example.*:
+    description: Grants all other permissions
+    default: op
+    children:
+      example.test: true

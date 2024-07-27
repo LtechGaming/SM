@@ -1,0 +1,13 @@
+{
+  links: {
+    discord: "none",
+    youtube: "none",
+    website: "none",
+    tiktok: "none"
+  },
+  server: {
+    timeout: 60,
+    bots: [],
+    moderated: true
+  }
+}

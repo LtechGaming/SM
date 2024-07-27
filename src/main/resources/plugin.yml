@@ -1,20 +1,61 @@
-main: ${PACKAGE}.${NAME}
-name: ${NAME}
-version: "${VERSION}"
+main: com.ltit.sm.ServerManagement
+name: ServerManagement
+version: "0.0.24"
 api-version: "1.16"
-author: AUTHOR
-description: DESCRIPTION
+author: "LTIT"
+description: "An all-in-one solution to server management"
 commands:
-  ex:
-    description: Base command for EXAMPLE
-    usage: "For a list of commands, type /ex help"
-    aliases: example
+  discord:
+    description: Link to discord set in config
+    usage: "For the discord server, type /discord"
+    aliases: "/discord"
+  tiktok:
+    description: Link to tiktok set in config
+    usage: "For the tiktok account, type /tiktok"
+    aliases: "/tiktok"
+  website:
+    description: Link to website set in config
+    usage: "For the website, type /website"
+    aliases: ["/web", "web", "/website"]
+  x:
+    description: Link to X(twitter) account set in config
+    usage: "For the twitter or X, type /x"
+    aliases: ["/x", "twitter", "/twitter"]
+  threads:
+    description: Link to threads set in config
+    usage: "For the threads, type /threads"
+    aliases: "/threads"
+  insta:
+    description: Link to the instagram set in config
+    usage: "For the instagram, type /insta"
+    aliases: ["instagram", "/instagram", "/insta"]
+  shop:
+    description: Link to the shop/store set in config
+    usage: "For the shop/store/merch, type /shop"
+    aliases: ["/shop", "store", "/store", "merch", "/merch", "merchandise", "/merchandise"]
+  youtube:
+    description: Link to the YouTube channel set in config
+    usage: "For the Youtube Channel, type /youtube"
+    aliases: ["/youtube", "yt", "/yt"]
+  sm:
+    description: About the version of SM that this server is using
+    usage: "SM info can be accessed using /sm"
+    aliases: "/sm"
+  playerinfo:
+    description: (experimental) Info about self
+    usage: "For experimental info on self, type /playerinfo"
+    aliases: "/playerinfo"
+  setrole:
+    description: (experimental) Sets a player's role
+    usage: "To change a player's role, type /setrole"
+    aliases: "/setrole"
+    permission-message: You are not an owner and cannot change roles.
 permissions:
   example.test:
-    description: DESCRIPTION
+    description: "Hi, ig"
     default: true
   example.*:
     description: Grants all other permissions
-    default: false
+    default: op
     children:
       example.test: true

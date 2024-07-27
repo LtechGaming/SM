@@ -1,14 +1,12 @@
-import com.github.spotbugs.snom.SpotBugsTask
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'checkstyle'
-    id "com.github.spotbugs" version "6.0.17"
-    id 'io.github.goooler.shadow' version '8.1.7'
-    id 'java'
+    id('io.github.goooler.shadow') version ('8.1.7')
+    id('java')
+    id("xyz.jpenilla.run-paper") version ("1.0.6")
 }
 
-group = "com.crimsonwarpedcraft.exampleplugin"
+group = "com.ltit.sm"
 
 static def getTime() {
     SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd-HHmm")
@@ -29,7 +27,7 @@ if (hasProperty('ver')) {
 // If the tag includes "-RC-" or no tag is supplied, append "-SNAPSHOT"
 int rcIdx
 if (shortVersion == null || shortVersion == "") {
-    version = getTime() + "-SNAPSHOT"
+    version = "-SNAPSHOT"
 } else if ((rcIdx = shortVersion.indexOf("-RC-")) != -1) {
     version = shortVersion.substring(0, rcIdx) + "-SNAPSHOT"
 } else {
@@ -59,7 +57,6 @@ repositories {
             includeModule("com.mojang", "brigadier")
         }
     }
-
     mavenCentral()
 }
 
@@ -67,11 +64,11 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.5'
     implementation 'io.papermc:paperlib:1.0.8'
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0'
     testCompileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.5'
     testImplementation 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.2'
+
 }
 
 test {
@@ -81,33 +78,6 @@ test {
 processResources {
     filesMatching("**/plugin.yml") {
         expand ( NAME: rootProject.name, VERSION: version, PACKAGE: project.group.toString() )
-    }
-}
-
-checkstyle {
-    toolVersion '10.14.0'
-    maxWarnings = 0
-}
-
-configurations.checkstyle {
-    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
-        select("com.google.guava:guava:23.0")
-    }
-}
-
-tasks.withType(Checkstyle).configureEach {
-    reports {
-        xml.required = false
-        html.required = true
-    }
-}
-
-tasks.withType(SpotBugsTask).configureEach {
-    reports.create("html") {
-        required = true
-    }
-    reports.create("xml") {
-        required = false
     }
 }
 
@@ -136,6 +106,26 @@ tasks.register('release') {
             shadowJar.archiveFile.get().getAsFile()
                     .renameTo(layout.buildDirectory.get().toString() + File.separator + 'libs' + File.separator
                             + rootProject.name + '.jar')
+        }
+    }
+}
+// Tasks for running the server.
+tasks {
+    runServer {
+        // Configure the Minecraft version for our task.
+        // This is the only required configuration besides applying the plugin.
+        // Your plugin's jar (or shadowJar if present) will be used automatically.
+        minecraftVersion("1.20.6")
+        jvmArgs("-Dnet.kyori.adventure.text.warnWhenLegacyFormattingDetected:false -Dservecorex.debug=true")
+
+        doFirst() {
+            mkdir file("run/")
+            mkdir file("run/plugins/")
+
+            copy {
+                from fileTree(file("libs/"))
+                into file("run/plugins/")
+            }
         }
     }
 }
